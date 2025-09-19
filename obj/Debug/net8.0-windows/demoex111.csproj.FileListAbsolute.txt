@@ -48,3 +48,4 @@ D:\students\ИП-302\Таксатов\demoex111\obj\Debug\net8.0-windows\demoex1
 D:\students\ИП-302\Таксатов\demoex111\obj\Debug\net8.0-windows\demoex111.EditForm.resources
 D:\students\ИП-302\Таксатов\demoex111\obj\Debug\net8.0-windows\demoex111.ShowAll.resources
 D:\students\ИП-302\Таксатов\demoex111\obj\Debug\net8.0-windows\demoex111.Properties.Resources.resources
+D:\students\ИП-302\Таксатов\demoex111\obj\Debug\net8.0-windows\demoex111.sourcelink.json

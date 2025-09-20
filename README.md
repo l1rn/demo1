@@ -64,6 +64,34 @@ namespace demo1
             
 - Подключаемся к бд `optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=postgres;Username=postgres;Password=123");`
 
+## 📖 Создадим класс для чтения Excel таблиц
+Расмотрим один пример с чтением `Material_type_import.xlsx`
+``` c#
+public class ExcelReader
+{
+    public void ReadMaterialTypeFromExcelFile(ApplicationContext db, string excelFile)
+    {
+        ExcelPackage.License.SetNonCommercialPersonal("sadasdfasdgdrafhbrtshrthbtfghfgcgf"); // тут просто чтобы читать задаем, что мы не коммерческая орга
+        using var package = new ExcelPackage(new FileInfo(excelFile)); // читаем наш файл
+        var worksheet = package.Workbook.Worksheets[0]; // открываем первый лист
+        for (int row = 2; row <= worksheet.Dimension.End.Row; row++) // проходимся по каждой строчке
+        {
+            var name = worksheet.Cells[row, 1].Text;
+            var breakPercent = worksheet.Cells[row, 2].Text;
+
+            MaterialType sample = new MaterialType { 
+                Name = name, 
+                PercentBreak = float.Parse(breakPercent.Replace("%", "")) 
+            };
+
+            db.MaterialTypes.Add(sample);
+            db.SaveChanges();   
+            // добавляем и сохраняем данные в бд
+        }
+    }
+}
+```
+
 # 👁️ Интерфейс (Модуль 2)
 #### 1. Создаем карточку из объекта UserControl
 ![user control](docs/6.png)
@@ -103,7 +131,7 @@ using (ApplicationContext db = new ApplicationContext()) {
     var products = db.Products.ToDictionary(p => p.Name, p => p.Width); // создаем словарь на продукты
     var productTypes = db.ProductTypes.ToDictionary(pt => pt.Id, pt => pt.Name); // создаем словарь на тип продуктов
 
-    if(!products.TryGetValue(_productName, out float pWidth)) // находим продукт по имени в словаре
+    if(!products.TryGetValue(_productName, out float pWidth))
     {
         MessageBox.Show("Не получилось найти продукт");
         return;

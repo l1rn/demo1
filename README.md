@@ -91,3 +91,35 @@ namespace demo1.core
 <b>Так вот почему именно такой?</b> Абстрактно даем каждому полю в карточке свой параметр на картинке по понятнее
 ![explanation](docs/8.png)
 Также прикрепил `Product` и `Material` для удобства в дальнейшем
+
+# 😮‍💨 Опять исключения и интерфейсы другими словами (3 модуль)
+#### Создаем окошки
+![main](docs/9.png)
+![add](docs/10.png)
+
+# 🎴 Создаем метод (4 модуль)
+``` c#
+using (ApplicationContext db = new ApplicationContext()) {
+    var products = db.Products.ToDictionary(p => p.Name, p => p.Width); // создаем словарь на продукты
+    var productTypes = db.ProductTypes.ToDictionary(pt => pt.Id, pt => pt.Name); // создаем словарь на тип продуктов
+
+    if(!products.TryGetValue(_productName, out float pWidth)) // находим продукт по имени в словаре
+    {
+        MessageBox.Show("Не получилось найти продукт");
+        return;
+    }
+    Product p = db.Products.Where(p => p.Name == _productName).FirstOrDefault();
+
+    float p1 = float.Parse(textBox1.Text); // параметр 1 - сколько нужно продукта
+    float p2 = pWidth; // параметр 2 - ширина продукта
+    float p3 = db.ProductTypes.Find(p.ProductTypeId).TypeCoef; // тип коэффициента продукт, тип продукта
+
+    float m1Divide = _material.QuantityInPackage; // сколько материала в упаковке
+    float m2 = _material.QuantityInStorage; // надо высчитывать, сколько на складе есть высчитывать с минимальным количеством
+    float m3 = db.MaterialTypes.Find(_material.MaterialTypeId).PercentBreak; // процент брака
+
+    float first = p1 * p2 * p3 * m3;
+    float result = first / m1Divide;
+    MessageBox.Show($"Материала потребуется: {result:0.00}");
+}
+```

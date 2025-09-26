@@ -43,7 +43,6 @@ namespace demoex111
             _productName = data.ProductName;
             _material = data.material;
             label6.MaximumSize = new Size(200, 20);
-
         }
 
         private void button1_Click(object sender, EventArgs e)

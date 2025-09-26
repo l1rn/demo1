@@ -11,15 +11,15 @@ namespace demoex111
         {
             panel1.BackColor = ColorTranslator.FromHtml("#BBD9B2");
             Label label = new Label();
-            label.Text = "Крутой маркет";
+            label.Text = "РљСЂСѓС‚РѕР№ РјР°СЂРєРµС‚";
             label.Font = new Font("Gabriola", 20);
             label.Size = new Size(200, 100);
             label.Location = new Point(5, 10);
 
             panel1.Controls.Add(label);
 
-            button1.Text = "Добавить";
-            button2.Text = "Посмотреть";
+            button1.Text = "Р”РѕР±Р°РІРёС‚СЊ";
+            button2.Text = "РћС‚РєСЂС‹С‚СЊ";
             button1.BackColor = ColorTranslator.FromHtml("#2d6033"); 
             button2.BackColor = ColorTranslator.FromHtml("#2d6033");
         }

@@ -30,8 +30,8 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ShowAll));
             panel1 = new Panel();
-            panel2 = new Panel();
             pictureBox1 = new PictureBox();
+            panel2 = new Panel();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
@@ -46,14 +46,6 @@
             panel1.Size = new Size(914, 149);
             panel1.TabIndex = 1;
             // 
-            // panel2
-            // 
-            panel2.Dock = DockStyle.Fill;
-            panel2.Location = new Point(0, 149);
-            panel2.Name = "panel2";
-            panel2.Size = new Size(914, 358);
-            panel2.TabIndex = 2;
-            // 
             // pictureBox1
             // 
             pictureBox1.Image = Properties.Resources.Наш_декор;
@@ -63,6 +55,14 @@
             pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
             pictureBox1.TabIndex = 3;
             pictureBox1.TabStop = false;
+            // 
+            // panel2
+            // 
+            panel2.Dock = DockStyle.Fill;
+            panel2.Location = new Point(0, 149);
+            panel2.Name = "panel2";
+            panel2.Size = new Size(914, 358);
+            panel2.TabIndex = 2;
             // 
             // ShowAll
             // 

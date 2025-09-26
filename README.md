@@ -122,18 +122,98 @@ namespace demo1.core
 Также прикрепил `Product` и `Material` для удобства в дальнейшем
 
 # 😮‍💨 Опять исключения и интерфейсы другими словами (3 модуль)
-### Создаем окошки
-#### 1. Главная форма 
+## Создаем окошки
+### 1. Главная форма 
 ![main](docs/9.png)
 - Я задал текст элементам через код
     ![addition](docs/11.png)
 
-#### 2. Делаем форму добавления и редактирования одной формой, потом просто поменяем логику кнопок
+### 2. Делаем форму добавления и редактирования одной формой, потом просто поменяем логику кнопок
 ![add](docs/10.png)
 
-#### 3. Форма просмотра
+### 3. Форма просмотра
 Делаем такую же как и [Главная форма](#1-главная-форма), только вместо кнопок у нас будет `Panel` с параметром `Dock.Fill`
 ![show](docs/12.png)
+#### Настраиваем нашу форму внутри
+1. Создаем новый метод `private void LoadCards()` и пихаем его в конструктор
+``` c#
+public ShowAll()
+{
+    InitializeComponent();
+    LoadCards();
+}
+```
+2. Внутри этого метода делаем логику для наших карточек, как они должны подгружаться на этой форме.
+    - `panel2.Controls.Clear();` - очищает панель каждый раз.
+    - `y` - будущая высота для карточки.
+    - `space` - расстояние между карточками.
+    - `productTypes` - типы продуктов в словаре **(id, product_type)**, ниже описываю суть работы.
+        1. Мы сейчас находимся в жизненном цикле и можем манипулировать с бд как хотим, потому что я написал `using (ApplicationContext db = new ApplicationContext()) `.
+        2. Так вот обращаемся к таблице, которая нам нужна `db.ProductTypes`.
+        3. Ну и с помощью [LINQ](https://learn.microsoft.com/en-us/dotnet/api/system.linq.enumerable.todictionary?view=net-9.0) уже переношу в словарь, чтобы потом задействовать.
+    - `if(!productTypes.TryGetValue(product.ProductTypeId, out string productTypeName))`
+        1. Здесь я пытаюсь получить имя типа продукта из словаря, который мы создали до начала цикла и сравниваю `product.ProductTypeId`
+        2. У нас связаны `Product` и `ProductType` и хочу получить имя, которое я оставил в словаре и получаю `out string productTypeName`.
+        ![link](docs/13.png)
+
+``` c#
+// !!! Закоментированный код, пока не рассматриваем, так как это расчет цены для продукта. !!!
+ 
+try
+{
+    using (ApplicationContext db = new ApplicationContext())
+    {
+        panel2.Controls.Clear();
+        int y = 10;
+        int space = 10;
+
+        // var productMaterials = db.ProductsMaterial
+        //     .Include(pm => pm.material)
+        //     .ToList();
+
+        var productTypes = db.ProductTypes.ToDictionary(pt => pt.Id, pt => pt.Name); 
+
+        // Иттерируемся по каждому продукту в бд по таблице Products
+        foreach (var product in db.Products.ToList()) {
+            // float price = 0;
+            // var productToMaterials = productMaterials
+            //     .Where(pm => pm.ProductId == product.Id)
+            //     .ToList();
+
+            // Material material = new Material();
+            // foreach(var productMaterial in productToMaterials)
+            // {
+            //     price += productMaterial.material.PriceForOneUnit * productMaterial.NeedToProduct;
+            //     material = productMaterial.material;
+            // }
+
+            if(!productTypes.TryGetValue(product.ProductTypeId, out string productTypeName))
+            {
+                return;
+            }
+
+            ProductLoadData data = new ProductLoadData { 
+                ProductTypeName = productTypeName,
+                ProductName = product.Name,
+                Article = product.Article,
+                MinPricePartner = product.MinimalPriceForPartner,
+                Width = product.Width,
+                Price = 0,
+                material = material
+            };
+
+            InfoCard infoCard = new InfoCard(data);
+            infoCard.Location = new Point(10, y);
+            infoCard.Width = panel2.Width - 40;
+
+            panel2.Controls.Add(infoCard);
+            panel2.AutoScroll = true;
+            y += infoCard.Height + space;
+        }
+    }
+}
+```
+
 
 # 🎴 Создаем метод (4 модуль)
 ``` c#
